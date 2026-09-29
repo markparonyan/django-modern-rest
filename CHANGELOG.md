@@ -236,6 +236,8 @@ ask your coding agent to use `$dmr-upgrade` to upgrade a project.
 
 ### Features
 
+- Exceptions converted into `5xx` responses are now logged
+  into the `dmr.request` logger, #502
 - Component parameters can now have default values, like
   `parsed_body: Body[Model | None] = None`
   or `parsed_query: Query[Filters | None] = None`.

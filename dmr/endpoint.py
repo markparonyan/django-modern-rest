@@ -28,6 +28,7 @@ from dmr.internal.endpoint import ValidateSyncCallable as ValidateSyncCallable
 from dmr.internal.endpoint import modify as modify
 from dmr.internal.endpoint import request_endpoint as request_endpoint
 from dmr.internal.endpoint import validate as validate
+from dmr.internal.loggers import log_server_error
 from dmr.metadata import EndpointMetadata, ResponseModification
 from dmr.negotiation import RequestNegotiator, ResponseNegotiator
 from dmr.openapi.collector import InternalRouteMetadata
@@ -560,6 +561,7 @@ class Endpoint:  # noqa: WPS214
             # because it is too late. Since `ResponseSchemaError`
             # happened most likely because the return
             # schema validation was not successful.
+            log_server_error(controller.request, exc, exc.status_code)
             return controller.to_error(
                 controller.format_error(exc),
                 status_code=exc.status_code,

@@ -503,6 +503,37 @@ since they might contain sensitive data.
   See :ref:`handler500` if you want to change the ``500`` error rendering.
 
 
+Logging
+-------
+
+When ``django-modern-rest`` converts an exception into a ``5xx`` response,
+it logs this exception with its traceback
+into the ``dmr.request`` logger with the ``ERROR`` level.
+Log records have ``status_code`` and ``request`` extra attributes,
+just like Django's ``django.request`` logger does.
+
+``4xx`` responses are not logged by ``django-modern-rest``:
+Django already logs them into ``django.request``.
+
+Use Django's
+`LOGGING <https://docs.djangoproject.com/en/stable/ref/settings/#logging>`_
+setting to configure it:
+
+.. code-block:: python
+  :caption: settings.py
+
+  LOGGING = {
+      'version': 1,
+      'disable_existing_loggers': False,
+      'handlers': {
+          'console': {'class': 'logging.StreamHandler'},
+      },
+      'loggers': {
+          'dmr': {'handlers': ['console'], 'level': 'ERROR'},
+      },
+  }
+
+
 API Reference
 -------------
 

@@ -26,6 +26,7 @@ from dmr.exceptions import (
     TooManyRequestsError,
     ValidationError,
 )
+from dmr.internal.loggers import log_server_error
 from dmr.security.base import add_www_authenticate
 
 if TYPE_CHECKING:
@@ -316,6 +317,7 @@ def global_error_handler(
         # how to authenticate. Replace this handler to change or drop it.
         add_www_authenticate(exc, endpoint.metadata.auth)
     if isinstance(exc, _default_handled_excs):
+        log_server_error(controller.request, exc, exc.status_code)
         return controller.to_error(
             controller.format_error(exc),
             status_code=exc.status_code,
